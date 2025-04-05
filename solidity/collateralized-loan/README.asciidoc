@@ -24,8 +24,7 @@ Platform specific items:
  * loan will be paid back if LTV exceeds 85%
  * min loan amount: 200 USDT
  * fees:
- ** loan request fee paid by loan requester: 15 USDT
- ** settlement fee paid by borrower if a loan is accepted: max(25 USDT, 1% loan amount)
-
+ ** loan request fee paid by borrower: 1% of loan amount
+ ** settlement fee paid by borrower if a loan is accepted: 1% of loan amount
 
 It's a proof of concept implementation so more advanced features like being able to use your collateral across multiple loans won't be implemented just yet.
