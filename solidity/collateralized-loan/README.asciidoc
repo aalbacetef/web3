@@ -1,0 +1,31 @@
+
+
+= Introduction 
+
+This project is inspired by Udacity's capstone project of the course Blockchain with Solidity: https://github.com/udacity/cd13282-blockchain-with-solidity-project
+
+== Collateralized Loan 
+
+The idea is quite simple:
+
+ * users make a loan request by depositing some collateral and specifying: 
+ ** amount requested
+ ** duration 
+ ** interest rate 
+ * users can browse open loan requests and decide to accept a loan request
+ ** the money will be deposited in the requester's account 
+ ** a loan entry will be created 
+ ** the collateral will be held until the loan is repaid 
+ 
+
+Platform specific items: 
+
+ * max LTV of 75%
+ * loan will be paid back if LTV exceeds 85%
+ * min loan amount: 200 USDT
+ * fees:
+ ** loan request fee paid by loan requester: 15 USDT
+ ** settlement fee paid by borrower if a loan is accepted: max(25 USDT, 1% loan amount)
+
+
+It's a proof of concept implementation so more advanced features like being able to use your collateral across multiple loans won't be implemented just yet.
