@@ -78,6 +78,7 @@ contract CollateralizedLoan {
     bool isPaid;
   }
 
+  // @TODO: add min loan amount
   /**
    * @param _maxLTV Maximum ratio of loan to collateral value. 
    * @param _loanRequestFeePercentage Percentage charged on the loan request, based on the loan amount. 
