@@ -32,6 +32,15 @@ contract CollateralizedLoan {
   error TokenNotFound(address tokenAddress);
   error NotEnoughCollateral(uint256 amount);
 
+  event LoanRequestCreated(
+    uint256 id,
+    address borrower,
+    uint256 collateralAmount,
+    address collateralToken,
+    uint256 loanAmount,
+    address loanToken
+  );
+
   LoanRequest[] public loanRequests;
   Loan[] public loans;
   uint256 private lastLoanRequestID;
@@ -174,6 +183,7 @@ contract CollateralizedLoan {
     }
   }
 
+  // @NOTE: amounts may need to be padded (e.g: by 10 ** 18)
   function makeLoanRequest(
     uint256 collateralAmount,
     address collateralToken,
@@ -223,6 +233,15 @@ contract CollateralizedLoan {
     }));
 
     lastLoanRequestID++;
+
+    emit LoanRequestCreated(
+      lastLoanRequestID, 
+      borrower, 
+      collateralAmount, 
+      collateralToken, 
+      loanAmount, 
+      loanToken
+    );
   }
 
   // @dev Validates that the loan and collateral amounts are within the platform's range for LTV and that the tokens are accepted tokens. 
@@ -305,6 +324,14 @@ contract CollateralizedLoan {
     return false;
   }
 
+  function getLoanRequests() external view returns (LoanRequest[] memory) {
+    LoanRequest[] memory retVal = new LoanRequest[](loanRequests.length);
+    for (uint k = 0; k < loanRequests.length; k++) {
+      retVal[k] = loanRequests[k]; // @TODO: copy struct
+    }
+
+    return retVal;
+  }
 }
 
 
