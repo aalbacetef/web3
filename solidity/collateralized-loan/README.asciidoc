@@ -4,6 +4,8 @@
 
 This project is inspired by Udacity's capstone project of the course Blockchain with Solidity: https://github.com/udacity/cd13282-blockchain-with-solidity-project
 
+WIP: not yet finished / fully implemented.
+
 == Collateralized Loan 
 
 The idea is quite simple:
