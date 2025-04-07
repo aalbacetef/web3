@@ -17,9 +17,8 @@ import {
 } from '../lib/defaults';
 import { shouldFailWithError, shouldFulfill } from './helper';
 
-
 function getTokenInfoList() {
-  const toPrice = (price: number) => BigInt(Math.floor(1e8 * price))
+  const toPrice = (price: number) => BigInt(Math.floor(1e8 * price));
 
   type Token = {
     sym: string;
@@ -42,7 +41,7 @@ function getTokenInfoList() {
 
 async function deployPriceFeedsAndTokens() {
   const initialSupply = BigInt(1_000_000) * BigInt(10 ** 18);
-  const { tokens, collateralTokens, loanTokens } = getTokenInfoList();
+  const { tokens, collateralTokens } = getTokenInfoList();
 
   const tokenContracts = new Array(tokens.length);
   const priceFeeds = new Array(tokens.length);
@@ -50,20 +49,27 @@ async function deployPriceFeedsAndTokens() {
   for (let k = 0; k < tokens.length; k++) {
     const token = tokens[k];
 
-    tokenContracts[k] = await hre.viem.deployContract(
-      "MockToken",
-      [token.sym, token.sym, initialSupply],
-    );
+    tokenContracts[k] = await hre.viem.deployContract('MockToken', [
+      token.sym,
+      token.sym,
+      initialSupply,
+    ]);
 
-    priceFeeds[k] = await hre.viem.deployContract(
-      'MockPriceFeed',
-      [tokenContracts[k].address, token.price]
-    );
+    priceFeeds[k] = await hre.viem.deployContract('MockPriceFeed', [
+      tokenContracts[k].address,
+      token.price,
+    ]);
   }
 
-  const collateralTokenPriceFeeds = priceFeeds.slice(0, collateralTokens.length);
+  const collateralTokenPriceFeeds = priceFeeds.slice(
+    0,
+    collateralTokens.length
+  );
   const loanTokenPriceFeeds = priceFeeds.slice(collateralTokens.length);
-  const collateralTokenContracts = tokenContracts.slice(0, collateralTokens.length);
+  const collateralTokenContracts = tokenContracts.slice(
+    0,
+    collateralTokens.length
+  );
   const loanTokenContracts = tokenContracts.slice(collateralTokens.length);
 
   return {
@@ -83,7 +89,7 @@ describe('CollateralizedLoan', function() {
       collateralTokenPriceFeeds,
       loanTokenPriceFeeds,
       collateralTokenContracts,
-      loanTokenContracts
+      loanTokenContracts,
     } = await deployPriceFeedsAndTokens();
 
     const contract = await hre.viem.deployContract('CollateralizedLoan', [
@@ -93,10 +99,10 @@ describe('CollateralizedLoan', function() {
       BigInt(liquidationThreshold),
       BigInt(minInterestRate),
       BigInt(maxLoanDurationInDays),
-      collateralTokenContracts.map(tokenContract => tokenContract.address),
-      collateralTokenPriceFeeds.map(priceFeed => priceFeed.address),
-      loanTokenContracts.map(tokenContract => tokenContract.address),
-      loanTokenPriceFeeds.map(priceFeed => priceFeed.address),
+      collateralTokenContracts.map((tokenContract) => tokenContract.address),
+      collateralTokenPriceFeeds.map((priceFeed) => priceFeed.address),
+      loanTokenContracts.map((tokenContract) => tokenContract.address),
+      loanTokenPriceFeeds.map((priceFeed) => priceFeed.address),
     ]);
 
     const publicClient = await hre.viem.getPublicClient();
@@ -126,10 +132,10 @@ describe('CollateralizedLoan', function() {
       const wallets = await hre.viem.getWalletClients();
       const borrower = wallets[3];
       const ethToken = collateralTokenContracts.find(
-        (_, index) => collateralTokens[index].sym === "ETH"
+        (_, index) => collateralTokens[index].sym === 'ETH'
       );
       const usdcToken = loanTokenContracts.find(
-        (_, index) => loanTokens[index].sym === "USDC"
+        (_, index) => loanTokens[index].sym === 'USDC'
       );
 
       const loanRequestInfo = {
@@ -139,7 +145,7 @@ describe('CollateralizedLoan', function() {
         loanToken: usdcToken.address,
         interestRate: 85, // 8.5%,
         durationInDays: 150,
-      }
+      };
 
       await shouldFailWithError(
         contract.write.makeLoanRequest(
@@ -152,7 +158,8 @@ describe('CollateralizedLoan', function() {
             BigInt(loanRequestInfo.durationInDays),
           ],
           { account: borrower.account }
-        ), "NotEnoughCollateral"
+        ),
+        'NotEnoughCollateral'
       );
     });
 
@@ -169,16 +176,16 @@ describe('CollateralizedLoan', function() {
       const initialLoanRequests = await contract.read.getLoanRequests();
       expect(initialLoanRequests.length).to.be.equal(
         0,
-        "should initially be empty"
+        'should initially be empty'
       );
 
       const wallets = await hre.viem.getWalletClients();
       const borrower = wallets[3];
       const ethToken = collateralTokenContracts.find(
-        (_, index) => collateralTokens[index].sym === "ETH"
+        (_, index) => collateralTokens[index].sym === 'ETH'
       );
       const usdcToken = loanTokenContracts.find(
-        (_, index) => loanTokens[index].sym === "USDC"
+        (_, index) => loanTokens[index].sym === 'USDC'
       );
 
       const loanRequestInfo = {
@@ -188,13 +195,16 @@ describe('CollateralizedLoan', function() {
         loanToken: usdcToken.address,
         interestRate: 85, // 8.5%,
         durationInDays: 150,
-      }
+      };
 
       // give borrower twice as much as needed
-      await shouldFulfill(publicClient, ethToken.write.mint([
-        borrower.account.address,
-        BigInt(loanRequestInfo.collateralAmount * 2),
-      ]));
+      await shouldFulfill(
+        publicClient,
+        ethToken.write.mint([
+          borrower.account.address,
+          BigInt(loanRequestInfo.collateralAmount * 2),
+        ])
+      );
 
       await shouldFulfill(
         publicClient,
@@ -212,8 +222,10 @@ describe('CollateralizedLoan', function() {
       );
 
       const loanRequests = await contract.read.getLoanRequests();
-      expect(loanRequests.length).to.be.equal(1, 'it should have one loan request');
+      expect(loanRequests.length).to.be.equal(
+        1,
+        'it should have one loan request'
+      );
     });
-
-  })
+  });
 });

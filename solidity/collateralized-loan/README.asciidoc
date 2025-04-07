@@ -24,7 +24,6 @@ Platform specific items:
 
  * max LTV of 75%
  * loan will be paid back if LTV exceeds 85%
- * min loan amount: 200 USDT
  * fees:
  ** loan request fee paid by borrower: 1% of loan amount
  ** settlement fee paid by borrower if a loan is accepted: 1% of loan amount

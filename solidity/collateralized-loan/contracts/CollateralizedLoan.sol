@@ -170,17 +170,17 @@ contract CollateralizedLoan {
     lastLoanRequestID = 0;
 
     for(uint k = 0; k < _collateralTokens.length; k++) {
-      TokenInfo memory ti;
-      ti.addr = _collateralTokens[k];
-      ti.priceFeed = _collateralTokenPriceFeeds[k];
-      collateralTokens.push(ti);
+      collateralTokens.push(TokenInfo({
+        addr: _collateralTokens[k],
+        priceFeed: _collateralTokenPriceFeeds[k]
+      }));
     }
 
     for(uint k = 0; k < _loanTokens.length; k++) {
-      TokenInfo memory ti;
-      ti.addr = _loanTokens[k];
-      ti.priceFeed = _loanTokenPriceFeeds[k];      
-      loanTokens.push(ti);
+      loanTokens.push(TokenInfo({
+        addr: _loanTokens[k],
+        priceFeed: _loanTokenPriceFeeds[k]
+      }));
     }
   }
 
