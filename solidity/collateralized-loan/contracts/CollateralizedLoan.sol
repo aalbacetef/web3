@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: BSD-3-Clause
 pragma solidity ^0.8.28;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./AggregatorV3Interface.sol";
 
@@ -9,10 +10,7 @@ import "./AggregatorV3Interface.sol";
  * @author Arturo Albacete
  * @notice this is a proof-of-concept not meant for actual production.
  */
-contract CollateralizedLoan {
-    /// @dev the owner of the contract and the only one allowed to perform certain operations.
-    address payable owner;
-
+contract CollateralizedLoan is Ownable {
     uint256 public loanRequestFeePercentage;
     uint256 public settlementFeePercentage;
     uint256 public liquidationThreshold;
@@ -102,7 +100,7 @@ contract CollateralizedLoan {
         address[] memory _collateralTokenPriceFeeds,
         address[] memory _loanTokens,
         address[] memory _loanTokenPriceFeeds
-    ) {
+    ) Ownable(msg.sender) {
         require(
             _maxLTV > 0 && _maxLTV < 100,
             "max LTV must be within 0 and 100"
@@ -149,7 +147,6 @@ contract CollateralizedLoan {
             "max loan duration in days must be larger than 0"
         );
 
-        owner = payable(msg.sender);
         maxLTV = _maxLTV;
         settlementFeePercentage = _settlementFeePercentage;
         loanRequestFeePercentage = _loanRequestFeePercentage;
