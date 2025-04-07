@@ -16,12 +16,15 @@ check:
 
 .PHONY: check
 
-fmt: ts-fmt
+fmt: ts-fmt solidity-fmt
+
+solidity-fmt:
+	$(runner) prettier --no-config --write --plugin=prettier-plugin-solidity 'contracts/**/*.sol'
 
 ts-fmt:
 	$(runner) prettier --write './**/*.ts'
 
-.PHONY: fmt ts-fmt
+.PHONY: fmt ts-fmt solidity-fmt
 
 fmt-check:
 	$(runner) prettier --check './**/*.ts'
@@ -29,3 +32,7 @@ fmt-check:
 
 .PHONY: fmt-check
 
+lint:
+	$(runner) solhint ./**/*.sol
+
+.PHONY: lint
