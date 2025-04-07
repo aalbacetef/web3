@@ -212,7 +212,7 @@ describe('CollateralizedLoan', function() {
       );
 
       const loanRequests = await contract.read.getLoanRequests();
-      expect(loanRequests.length).to.be.equal(1);
+      expect(loanRequests.length).to.be.equal(1, 'it should have one loan request');
     });
 
   })
