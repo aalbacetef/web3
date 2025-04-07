@@ -2,8 +2,8 @@
 pragma solidity ^0.8.28;
 
 contract MockPriceFeed {
-    address tokenAddress;
-    int256 mockPrice;
+    address public tokenAddress;
+    int256 public mockPrice;
 
     constructor(address _tokenAddress, int256 _mockPrice) {
         tokenAddress = _tokenAddress;
