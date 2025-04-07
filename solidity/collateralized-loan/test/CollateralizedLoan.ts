@@ -82,7 +82,7 @@ async function deployPriceFeedsAndTokens() {
   };
 }
 
-describe('CollateralizedLoan', function() {
+describe('CollateralizedLoan', function () {
   async function deployDefault() {
     const { collateralTokens, loanTokens } = getTokenInfoList();
     const {
