@@ -1,3 +1,6 @@
 [submodule "solidity/lottery"]
 	path = solidity/lottery
 	url = https://github.com/aalbacetef/solidity-lottery
+[submodule "solidity/collateralized-loan"]
+	path = solidity/collateralized-loan
+	url = https://github.com/aalbacetef/solidity-collateralized-loan.git
