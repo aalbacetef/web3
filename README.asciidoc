@@ -2,4 +2,23 @@
 
 This repo contains various web3-related projects I am writing as I learn and venture deeper into the space.
 
+== Projects  
+
+=== Solidity 
+
+==== Lottery implementation
+
+This was my first big Solidity implementation (after going through the Cryptozombies course), the main stack is Hardhat w/ Viem for testing and the contract is as close as it comes to a proper production contract (minus a few things like some code that should be replaced with an oracle).
+
+It was where I truly realized the power of DeFi/Solidity/Smart contracts.
+
+==== Collateralized Loan System implementation
+
+What I'm currently working on. I saw it was the capstone project of the Udacity blockchain nanodegree so I decided to implement that (albeit with more complexity to make it more challenging).
+
+I now leverage OpenZeppelin contracts instead of reinventing the wheel.
+
+In the near future I'll be putting this in its own repo just as the lottery implementation.
+
+NOTE: I'm currently focusing on learning Solidity so the Solana project is just a scaffold from anchor.
 
